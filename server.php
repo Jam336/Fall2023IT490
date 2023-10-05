@@ -12,8 +12,18 @@ function doLogin($username,$password)
     //return false if not valid
 }
 
+function sqlTest()
+{
+
+
+
+
+}
+
 function requestProcessor($request)
 {
+
+  $outArray = 0;
   echo "received request".PHP_EOL;
   var_dump($request);
   if(!isset($request['type']))
@@ -22,12 +32,30 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "login":
+    case "Login":
+      $output = doLogin($request['username'],$request['password']);
+      $outArray = array("returnCode" => $output, 'message' => 'login request recieved', 'username' => $request['username']);
+      break;	
       return doLogin($request['username'],$request['password']);
+     
+
+
     case "validate_session":
-      return doValidate($request['sessionId']);
+	    return doValidate($request['sessionId']);
+	    break;
+    case "SqlTest":
+	   echo "test"; 
+	   return sqlTest();
+	   break;
+
+	
+
   }
-  return array("returnCode" => '0', 'message'=>"Server received request and processed");
+  if($outArray != 0)
+  {
+  	return $outArray;
+  }
+  return array("returnCode" => '0', 'message'=>"Server received request and processed", "test" => 'salad');
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
