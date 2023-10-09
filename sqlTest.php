@@ -2,9 +2,9 @@
 <?php
 
 $server = "192.168.192.11";
-$uname = "testUser";
+$uname = "rabbitMQ";
 $pass = "it490";
-$DB = "NameDB";
+$DB = "StockDB";
 
 try
 {
