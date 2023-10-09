@@ -1,27 +1,37 @@
-<<<<<<< HEAD
 <?php
-
+require('../client.php');
 
 if (!isset($_POST))
 {
-	$msg = "NO POST MESSAGE SET, POLITELY FUCK OFF";
+	$msg = "NO POST information";
 	echo json_encode($msg);
 	exit(0);
 }
 $request = $_POST;
-$response = "unsupported request type, politely FUCK OFF";
-switch ($request["type"])
+$response = "unsupported request type";
+$response = "login request";
+$error = false;
+
+if (empty($request["username"])
 {
-	case "login":
-		$response = "login, yeah we can do that";
-	break;
+	$response = "No username provided";
+	$error = true;
+}
+if (empty($request["password"])
+{
+	$response = "No password provided";
+	$error = true;
+}
+if (!$error)
+{
+	login($request);
+	$response = "Successfully sent to client";
 }
 echo json_encode($response);
 exit(0);
 
 ?>
-=======
-<?php  ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,4 +62,3 @@ exit(0);
   </form>
 </body>
 </html>
->>>>>>> 8586ad4d91bd30a6b627f14a88f8d67c31ef8ea1
