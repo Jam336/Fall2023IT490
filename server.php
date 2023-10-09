@@ -5,6 +5,42 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('login.php.inc');
 
+function sqlRequest($query){
+$server = "192.168.192.11";
+$uname = "rabbitMQ";
+$pass = "it490";
+$DB = "StockDB";
+
+ try
+{
+
+        $connect = new mysqli($server, $uname, $pass, $DB);
+}
+catch(mysqli_mysql_exception $err)
+{
+        echo ("conncection failing");
+}
+
+
+if ($connect->connect_error)
+{
+        die("Connection failed: " . $connect->connect_error);
+}
+
+//ql = "SELECT * FROM Users";
+$result = $connect->query($query);
+
+$connect->close();
+
+
+return $result;
+
+
+}
+
+
+
+
 function doLogin($username,$password)
 {
     // lookup username in databas
@@ -17,6 +53,9 @@ function doLogin($username,$password)
 function sqlTest()
 {
 
+	$results = sqlRequest("Select * FROM Users");
+
+	var_dump($results);
 
 
 
@@ -62,9 +101,14 @@ function requestProcessor($request)
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
+sqlTest();
+
 echo "testRabbitMQServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
 echo "testRabbitMQServer END".PHP_EOL;
+
+//sqlTest();
+
 exit();
 ?>
 
