@@ -71,26 +71,7 @@
 				die ("Connection failed " . $connect->connect_error);
 			}
 
-			$statement = $connect->prepare("SELECT userID, username, password from Users where username = :username");
-
-			try
-			{
-				$ex = statement->execute([":username" = $username]);
-
-				if ($ex)
-				{
-					$user = $statement->fetch(PDO::FETCH_ASSOC);
-
-					if (!$user)
-					{
-						echo ("Invalid username");
-					}
-				}
-			}
-			catch (exception e)
-			{
-				echo (var_export($e, true);
-			}
+			doLogin($username, $password);
 		}
 	}
 ?>

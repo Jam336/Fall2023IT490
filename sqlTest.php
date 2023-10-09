@@ -2,9 +2,9 @@
 <?php
 
 $server = "192.168.192.11";
-$uname = "testUser";
+$uname = "rabbitMQ";
 $pass = "it490";
-$DB = "NameDB";
+$DB = "StockDB";
 
 try
 {
@@ -29,7 +29,8 @@ if ($result->num_rows > 0)
 {
 	while ($row = $result->fetch_assoc())
 	{
-		echo("name: " . $row["username"] . "\n");
+		var_dump($row);
+		//echo("name: " . $row["username"] . "\n");
 	}
 }
 else
