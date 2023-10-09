@@ -72,6 +72,14 @@ function login($username, $password)
 	$result = sqlRequest($statement);
 	return($result);
 }
+
+function register($username, $password)
+{
+	$statement = "insert into Users(username, password) values('" . $username . "','" . $password . "')";
+	$result = sqlRequest($statement);
+	return($result);
+}
+
 function sqlTest()
 {
 
@@ -96,10 +104,11 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "Login":
-      $output = login($request['username'],$request['password']);
-      $outArray = array("returnCode" => $output, 'message' => 'login request recieved', 'username' => $request['username']);
-      break;	
-      return login($request['username'],$request['password']);
+     // $output = login($request['username'],$request['password']);
+     // $outArray = array("returnCode" => $output, 'message' => 'login request recieved', 'username' => $request['username']);
+	    // return (login($request['username'],$request['password']));
+	return login($request['username'], $request['password']);
+      break;
      
 
 
@@ -118,15 +127,23 @@ function requestProcessor($request)
   {
   	return $outArray;
   }
-  return array("returnCode" => '0', 'message'=>"Server received request and processed", "test" => 'salad');
+ return array("returnCode" => '0', 'message'=>"Server received request and processed", "test" => 'salad');
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
-$username = "Joey";
+$username = "Joey2";
 $password = "passwd";
+$type = "Login";
+$request = 
+	[
+		"type" => $type,
+		"username"=> $username,
+		"password" => $password,
+	];
 
-$bogus = login($username, $password);
+//$bogus = register($username, $password);
+$bogus = requestProcessor($request);
 var_dump($bogus);
 
 echo "testRabbitMQServer BEGIN".PHP_EOL;
