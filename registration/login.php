@@ -29,3 +29,49 @@
   </form>
 </body>
 </html>
+
+<?php
+
+	$server = "192.168.192.11";
+	$user = "rabbitMQ";
+	$pass = "it490";
+	$DB = "StockDB";
+
+	if (isset($_POST["username"]) && isset($_POST["password"]))
+	{
+		$error = false;
+		$username = $_POST["username"];
+		$password = $_POST["password"];
+
+		if (empty($username))
+		{
+			echo ("no username entered");
+			$error = true;
+		}
+		if (empty($password))
+		{
+			echo ("no password entered");
+			$error = true;
+		}
+
+		if (!$error)
+		{
+			try
+			{
+				$connect = new mysqli($server, $uname, $pass, $DB);
+			}
+			catch (mysqli_mysql_exception $err)
+			{
+				echo ("issue connecting to database");
+			}
+
+
+			if ($connect->connect_error)
+			{
+				die ("Connection failed " . $connect->connect_error);
+			}
+
+			doLogin($username, $password);
+		}
+	}
+?>

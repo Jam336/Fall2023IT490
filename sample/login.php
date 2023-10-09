@@ -1,3 +1,26 @@
+<<<<<<< HEAD
+<?php
+
+
+if (!isset($_POST))
+{
+	$msg = "NO POST MESSAGE SET, POLITELY FUCK OFF";
+	echo json_encode($msg);
+	exit(0);
+}
+$request = $_POST;
+$response = "unsupported request type, politely FUCK OFF";
+switch ($request["type"])
+{
+	case "login":
+		$response = "login, yeah we can do that";
+	break;
+}
+echo json_encode($response);
+exit(0);
+
+?>
+=======
 <?php  ?>
 <!DOCTYPE html>
 <html>
@@ -29,3 +52,4 @@
   </form>
 </body>
 </html>
+>>>>>>> 8586ad4d91bd30a6b627f14a88f8d67c31ef8ea1
