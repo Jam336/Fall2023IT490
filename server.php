@@ -30,10 +30,26 @@ if ($connect->connect_error)
 //ql = "SELECT * FROM Users";
 $result = $connect->query($query);
 
+if ($result->num_rows > 0)
+{
+	$data = [];
+	$count = 0;
+
+	while($row = $result->fetch_assoc())
+	{
+		$data[$count] = $row["username"];
+		$count++;
+	}
+}
+else
+{
+	$data = "No results";
+}
+
 $connect->close();
 
 
-return $result;
+return $data;
 
 
 }
@@ -50,6 +66,12 @@ function doLogin($username,$password)
     //return false if not valid
 }
 
+function login($username, $password)
+{
+	$statement = "SELECT userID, username, password FROM Users WHERE username = '" . $username . "'";
+	$result = sqlRequest($statement);
+	return($result);
+}
 function sqlTest()
 {
 
@@ -74,10 +96,10 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "Login":
-      $output = doLogin($request['username'],$request['password']);
+      $output = login($request['username'],$request['password']);
       $outArray = array("returnCode" => $output, 'message' => 'login request recieved', 'username' => $request['username']);
       break;	
-      return doLogin($request['username'],$request['password']);
+      return login($request['username'],$request['password']);
      
 
 
@@ -101,7 +123,11 @@ function requestProcessor($request)
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
-sqlTest();
+$username = "Joey";
+$password = "passwd";
+
+$bogus = login($username, $password);
+var_dump($bogus);
 
 echo "testRabbitMQServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
