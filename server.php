@@ -30,14 +30,16 @@ if ($connect->connect_error)
 //ql = "SELECT * FROM Users";
 $result = $connect->query($query);
 
+  if (!isset($result))
+{
+	echo "No data";
 
-
-return $result;
-
+    
+    
 $connect->close();
 
 
-return $data;
+return $result;
 
 
 }
@@ -110,7 +112,9 @@ function logout($userID, $token){
 	return $result;
 
 }
-
+	
+  
+  
 function requestProcessor($request)
 {
 

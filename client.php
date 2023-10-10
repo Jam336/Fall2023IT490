@@ -6,7 +6,7 @@ require_once('rabbitMQLib.inc');
 
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 
-
+/*
 $request = array();
 $request['type'] = "login";
 $request['username'] = $argv[1];
@@ -20,4 +20,25 @@ print_r($response);
 echo "\n\n";
 
 echo $argv[0]." END".PHP_EOL;
+ */
 
+function login ($request)
+{
+	$client = new rabbitMQClient("testRabbitMQ.ini", "testServer");
+	$request['type'] = "Login";
+	$response = $client->send_request($request);
+	return ($response);
+}
+
+$username = "Joey2";
+$password = "passwd";
+$type = "Login";
+$request =
+        [
+                "type" => $type,
+                "username"=> $username,
+                "password" => $password,
+        ];
+
+$bogus = login($request);
+var_dump($bogus);
