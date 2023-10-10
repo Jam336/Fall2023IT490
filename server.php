@@ -89,49 +89,8 @@ function sqlTest()
 
 
 
-}
+}	
 
-$current_time = time();
-
-// Define the expiration time threshold (e.g., one hour ago)
-$expiration_threshold = $current_time - 3600;
-
-// Delete expired tokens
-$query = "DELETE FROM tokens WHERE expiration_time < $expiration_threshold";
-mysqli_query($connection, $query);
-
-function logout($sessionId) {
-    // Check if the session is active
-    if (isset($_SESSION['userID']) && session_id() === $sessionId) {
-        $userID = $_SESSION['userID'];
-
-       // Delete
-        $query = "DELETE FROM tokens WHERE userID = $userID";
-        mysqli_query($connection, $query);
-
-        // Destroy the session
-        session_destroy();
-
-        
-        header('Location: logout_confirmation.php');
-        exit();
-    } else {
-        // redirect to the login page
-        header('Location: login.php');
-        exit();
-    }
-}
-
-// Usage: Call the logout function with the session ID
-if (isset($_GET['sessionId'])) {
-    $sessionId = $_GET['sessionId'];
-    logout($sessionId);
-} else {
-    // Handle the case where no session ID is provided
-    header('Location: error.php');
-    exit();
-}
-	
 function requestProcessor($request)
 {
 
