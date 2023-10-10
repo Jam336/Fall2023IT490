@@ -30,26 +30,15 @@ if ($connect->connect_error)
 //ql = "SELECT * FROM Users";
 $result = $connect->query($query);
 
-if ($result->num_rows > 0)
+if (!isset($result))
 {
-	$data = [];
-	$count = 0;
-
-	while($row = $result->fetch_assoc())
-	{
-		$data[$count] = $row["username"];
-		$count++;
-	}
-}
-else
-{
-	$data = "No results";
+	echo "No data";
 }
 
 $connect->close();
 
 
-return $data;
+return $result;
 
 
 }
@@ -70,7 +59,8 @@ function login($username, $password)
 {
 	$statement = "SELECT userID, username, password FROM Users WHERE username = '" . $username . "'";
 	$result = sqlRequest($statement);
-	return($result);
+	$row = $result->fetch_assoc();
+	return($row['username']);
 }
 
 function register($username, $password)
@@ -89,8 +79,9 @@ function sqlTest()
 
 
 
-}	
 
+}	
+	
 function requestProcessor($request)
 {
 
