@@ -34,7 +34,7 @@ $result = $connect->query($query);
 {
 	echo "No data";
 
-    
+  }    
     
 $connect->close();
 
