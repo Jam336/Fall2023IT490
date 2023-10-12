@@ -46,21 +46,43 @@ return $result;
 
 
 
-function doLogin($username,$password)
+function generateToken($userID)
 {
-    // lookup username in databas
-    // check password
-    $login = new loginDB();
-    return $login->validateLogin($username,$password);
-    //return false if not valid
+	$token = "token";
+	$statement = "INSERT INTO Tokens (userID,token) VALUES (" . $userID . ", '" . $token . "');";
+	$result = sqlRequest($statement);
+	
+
+
+
+
+
+	return($token);
 }
 
 function login($username, $password)
 {
-	$statement = "SELECT userID, username, password FROM Users WHERE username = '" . $username . "'";
+	$statement = "SELECT userID, username, password FROM Users WHERE username = '" . $username . "' AND password = '" . $password . "'";
 	$result = sqlRequest($statement);
 	$row = $result->fetch_assoc();
-	return($row['username']);
+
+	var_dump($result);
+	if(!isset($row))
+	{
+	echo "No results!\n";
+	return "No results!";
+
+	}
+
+	//echo($result['num_rows']);
+
+	$out = 
+	[
+		"userID" => $row['userID'],
+		"token" => generateToken($row['userID'])
+	];	
+	
+	return($out);
 }
 
 function register($username, $password)
@@ -94,7 +116,7 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "Login":
+    case "login":
      // $output = login($request['username'],$request['password']);
      // $outArray = array("returnCode" => $output, 'message' => 'login request recieved', 'username' => $request['username']);
 	    // return (login($request['username'],$request['password']));
@@ -123,19 +145,19 @@ function requestProcessor($request)
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
-$username = "Joey2";
-$password = "passwd";
-$type = "Login";
-$request = 
+//$username = "Joey2";
+//$password = "passwd";
+//$type = "Login";
+/*$request = 
 	[
 		"type" => $type,
 		"username"=> $username,
 		"password" => $password,
 	];
-
+ */
 //$bogus = register($username, $password);
-$bogus = requestProcessor($request);
-var_dump($bogus);
+//$bogus = requestProcessor($request);
+//var_dump($bogus);
 
 echo "testRabbitMQServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');

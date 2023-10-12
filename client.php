@@ -22,23 +22,52 @@ echo "\n\n";
 echo $argv[0]." END".PHP_EOL;
  */
 
-function login ($request)
+function login ($username, $password)
 {
 	$client = new rabbitMQClient("testRabbitMQ.ini", "testServer");
-	$request['type'] = "Login";
+
+	$request =
+        [
+                "type" => "login",
+                "username"=> $username,
+                "password" => $password,
+        ];
 	$response = $client->send_request($request);
 	return ($response);
 }
 
-$username = "Joey2";
-$password = "passwd";
-$type = "Login";
-$request =
+function register ($username, $password)
+{
+	$client = new rabbitMQClient("testRabbitMQ.ini", "testServer");
+	$request =
         [
-                "type" => $type,
+                "type" => "register",
                 "username"=> $username,
                 "password" => $password,
         ];
 
-$bogus = login($request);
+	$response = $client->send_requesr($request);
+	return ($response);
+
+}
+
+function logout ($userID, $token)
+{
+	$client = new rabbitMQClient("testRabbitMQ.ini", "testServer");
+	$request =
+        [
+                "type" => "logout",
+                "userID"=> $userID,
+                "token" => $token,
+        ];
+
+	$response = $client->send_requesr($request);
+	return ($response);
+
+}
+
+
+$username = "Joey2";
+$password = "passwd";
+$bogus = login($username, $password);
 var_dump($bogus);
