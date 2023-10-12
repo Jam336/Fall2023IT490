@@ -30,11 +30,12 @@ if ($connect->connect_error)
 //ql = "SELECT * FROM Users";
 $result = $connect->query($query);
 
-if (!isset($result))
+  if (!isset($result))
 {
 	echo "No data";
-}
 
+    
+    
 $connect->close();
 
 
@@ -62,6 +63,7 @@ function generateToken($userID)
 
 function login($username, $password)
 {
+
 	$statement = "SELECT userID, username, password FROM Users WHERE username = '" . $username . "' AND password = '" . $password . "'";
 	$result = sqlRequest($statement);
 	$row = $result->fetch_assoc();
@@ -83,6 +85,7 @@ function login($username, $password)
 	];	
 	
 	return($out);
+
 }
 
 function register($username, $password)
@@ -99,11 +102,24 @@ function sqlTest()
 
 	var_dump($results);
 
+}
 
+function logout($userID, $token){
 
-
-}	
+	//Simple token deletion
+	$statement = "Delete FROM Tokens WHERE userID = " . $userID
+		. " AND token = '" . $token . "'";
 	
+	$result = sqlRequest($statement);
+
+	echo "token deleted\n";
+
+	return $result;
+
+}
+	
+  
+  
 function requestProcessor($request)
 {
 
@@ -133,7 +149,10 @@ function requestProcessor($request)
 	   return sqlTest();
 	   break;
 
-	
+    case "logout":
+ 	echo "Logging out...\n";
+    	return logout($request['userID'], $request['token']);
+	break;	
 
   }
   if($outArray != 0)
@@ -145,14 +164,21 @@ function requestProcessor($request)
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
+
 //$username = "Joey2";
 //$password = "passwd";
 //$type = "Login";
 /*$request = 
+=======
+$username = "1";
+$password = "token2";
+$type = "logout";
+$request = 
+>>>>>>> a61f64c0066aee886511d821d6884cc710483a32
 	[
 		"type" => $type,
-		"username"=> $username,
-		"password" => $password,
+		"userID"=> $username,
+		"token" => $password,
 	];
  */
 //$bogus = register($username, $password);
