@@ -49,7 +49,11 @@ return $result;
 
 function generateToken($userID)
 {
-	$token = "token";
+	
+	$str = rand();
+	$token = hash("sha256" , $str);
+
+	//$token = "token";
 	$statement = "INSERT INTO Tokens (userID,token) VALUES (" . $userID . ", '" . $token . "');";
 	$result = sqlRequest($statement);
 	
